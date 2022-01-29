@@ -1,11 +1,16 @@
 import React from "react";
 import Button from "./Button";
+import { useNavigate } from "react-router-dom";
 
 function Product({ product }) {
-    const share = (productName) => {
-        alert('The product <' + productName + '> has been shared!')
-    }
 
+  // Used to redirect a user to a specific URL.
+  let navigate = useNavigate();
+
+  const redirect = (URL) => {
+    navigate(URL);
+  };
+    
     const notify = (productName) => {
       alert('You will be notified when <' + productName + '> goes on sale!')
   }
@@ -18,10 +23,10 @@ function Product({ product }) {
       <h3>{product.name}</h3>
       <p>{product.description}</p>
       <p>
-      <Button color={'blue'} text={'SHARE'} click={() => share(product.name)}/>
+      <Button color={'#1976d2'} text={'See details'} click={() => redirect(`/details/${product.id}`)}/>
       </p>
       {product.price > 700 && 
-        <Button color={'blue'} text={'Notify me'} click={() => notify(product.name)}/>
+        <Button color={'green'} text={'Notify me'} click={() => notify(product.name)}/>
       }
     </div>
   );

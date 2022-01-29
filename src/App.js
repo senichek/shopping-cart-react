@@ -3,8 +3,12 @@ import TopBar from "./components/TopBar";
 import React, { useState } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Cart from "./components/Cart";
+import ProductDetails from "./components/ProductDetails";
 
 function App() {
+
+  const loggedInUserID = 1;
+
   const [products, setProducts] = useState([
     {
         id: 1,
@@ -25,16 +29,17 @@ function App() {
         description: ''
       }
 ]);
+
   return (
     <>
-    <TopBar />
     <BrowserRouter>
+    <TopBar />
         <Routes>
           <Route path="/cart" element={<Cart />} />
           <Route path="/" element={<ProductList products={products}/>} />
+          <Route path="/details/:productID" element={<ProductDetails products={products} />} />
         </Routes>
       </BrowserRouter>
-
     </>
   );
 }

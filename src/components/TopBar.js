@@ -1,23 +1,21 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faShoppingCart } from '@fortawesome/free-solid-svg-icons'
+import { useNavigate } from "react-router-dom";
 import Button from './Button';
-//<i class="fas fa-shopping-cart"></i>
 
 function TopBar() {
 
-  const redirect = () => {
-    alert('Redirected');
+ // Used to redirect a user to a specific URL.
+  let navigate = useNavigate();
+
+  const redirect = (URL) => {
+    navigate(URL);
   }
 
   return <div className='app-top-bar'>
       <h1>My Store</h1>
-    
-      <Button color={'white'} text={<FontAwesomeIcon icon={faShoppingCart} size='2x' />} click={() => redirect()}/>
-   
-
-      
-      
+      <Button color={'white'} text={<FontAwesomeIcon icon={faShoppingCart} size='2x' />} click={() => redirect('/cart')}/>
   </div>;
 }
 
