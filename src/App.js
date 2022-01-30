@@ -30,14 +30,25 @@ function App() {
       }
 ]);
 
+// Empty array for adding the items in Cart
+const [itemsInCart, setItemsInCart] = useState([]);
+
+const addToCart = (productID) => {
+  // We use parseInt because the <productID> comes in the form of string and not int.
+  let itemToAdd = products.find(x => x.id === parseInt(productID))
+  // Adding new item to the array of those that are already present in the array.
+  setItemsInCart([...itemsInCart, itemToAdd])
+  alert("Added to cart " + itemToAdd.name);
+};
+
   return (
     <>
     <BrowserRouter>
     <TopBar />
         <Routes>
-          <Route path="/cart" element={<Cart />} />
+          <Route path="/cart" element={<Cart products={itemsInCart}/>} />
           <Route path="/" element={<ProductList products={products}/>} />
-          <Route path="/details/:productID" element={<ProductDetails products={products} />} />
+          <Route path="/details/:productID" element={<ProductDetails products={products} onAddToCart={addToCart} />} />
         </Routes>
       </BrowserRouter>
     </>

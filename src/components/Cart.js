@@ -1,9 +1,10 @@
 import React from "react";
 import Button from "./Button";
 import { useNavigate } from "react-router-dom";
+import ProductList from "./ProductList";
 
-function Cart() {
-  
+function Cart({ products }) {
+
   // Used to redirect a user to a specific URL.
   let navigate = useNavigate();
 
@@ -13,6 +14,9 @@ function Cart() {
 
   return (
     <div>
+      {products.map((pr) => {
+          return<h3 key={pr.id}> {pr.name}</h3>
+      })}
       <p>
         <Button
           color={"#1976d2"}

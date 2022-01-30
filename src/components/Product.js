@@ -12,7 +12,7 @@ function Product({ product }) {
   };
     
     const notify = (productName) => {
-      alert('You will be notified when <' + productName + '> goes on sale!')
+      alert('You will be notified when the price of <' + productName + '> drops below 700 EUR')
   }
   // The expression <product.price > 700 &&> means that we 
   // will show the button if the price is higher than 700,
