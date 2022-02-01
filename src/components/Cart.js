@@ -1,7 +1,6 @@
 import React from "react";
 import Button from "./Button";
 import { useNavigate } from "react-router-dom";
-import ProductList from "./ProductList";
 
 function Cart({ products }) {
 
@@ -15,7 +14,7 @@ function Cart({ products }) {
   return (
     <div>
       {products.map((pr) => {
-          return<h3 key={pr.id}> {pr.name}</h3>
+          return<h3 key={pr._id}> {pr.title}</h3>
       })}
       <p>
         <Button

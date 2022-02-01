@@ -8,8 +8,7 @@ function ProductDetails({ products, onAddToCart }) {
 
   const getProductByID = (productID) => {
     return products.find((element) => {
-        // We use parseInt because the <productID> comes in the form of string from URL
-      return element.id === parseInt(productID);
+      return element._id === productID;
     });
   };
 
@@ -26,7 +25,7 @@ function ProductDetails({ products, onAddToCart }) {
     <div>
       {getProductByID(productID) && (
         <>
-          <h3>{getProductByID(productID).name}</h3>
+          <h3>{getProductByID(productID).title}</h3>
           <p>{getProductByID(productID).description}</p>
           <h3>{getProductByID(productID).price} EUR</h3>
           <p>

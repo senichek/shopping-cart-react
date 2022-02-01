@@ -20,13 +20,13 @@ function Product({ product }) {
   // https://reactjs.org/docs/conditional-rendering.html
   return (
     <div>
-      <h3>{product.name}</h3>
+      <h3>{product.title}</h3>
       <p>{product.description}</p>
       <p>
-      <Button color={'#1976d2'} text={'See details'} click={() => redirect(`/details/${product.id}`)}/>
+      <Button color={'#1976d2'} text={'See details'} click={() => redirect(`/details/${product._id}`)}/>
       </p>
       {product.price > 700 && 
-        <Button color={'green'} text={'Notify me'} click={() => notify(product.name)}/>
+        <Button color={'green'} text={'Notify me'} click={() => notify(product.title)}/>
       }
     </div>
   );
