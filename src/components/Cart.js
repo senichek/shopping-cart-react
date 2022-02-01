@@ -18,6 +18,13 @@ function Cart({ products }) {
       })}
       <p>
         <Button
+          color={"green"}
+          text={"Checkout"}
+          click={() => redirect("/checkout")}
+        />
+      </p>
+      <p>
+        <Button
           color={"#1976d2"}
           text={"Go back to store"}
           click={() => redirect("/")}

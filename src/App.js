@@ -4,31 +4,13 @@ import React, { useState, useEffect } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Cart from "./components/Cart";
 import ProductDetails from "./components/ProductDetails";
+import Checkout from "./components/Checkout";
 
 function App() {
 
   const loggedInUserID = 1;
 
-  const [products, setProducts] = useState([
-    /* {
-        id: 1,
-        name: 'Phone XL',
-        price: 799,
-        description: 'A large phone with one of the best screens'
-      },
-      {
-        id: 2,
-        name: 'Phone Mini',
-        price: 699,
-        description: 'A great phone with one of the best cameras'
-      },
-      {
-        id: 3,
-        name: 'Phone Standard',
-        price: 299,
-        description: ''
-      } */
-]);
+  const [products, setProducts] = useState([]);
 
 useEffect(() => {
   const getProducts = async () => {
@@ -56,6 +38,16 @@ const addToCart = (productID) => {
   alert("Added to cart " + itemToAdd.title);
 };
 
+const decreaseQuantity = (product) => {
+  product.quantity = product.quantity - 1;
+  // Replacing the original item with the modified one;
+}
+
+const purchase = () => {
+  alert("Thanks for your purchase.")
+  
+}
+
   return (
     <>
     <BrowserRouter>
@@ -64,6 +56,7 @@ const addToCart = (productID) => {
           <Route path="/cart" element={<Cart products={itemsInCart}/>} />
           <Route path="/" element={<ProductList products={products}/>} />
           <Route path="/details/:productID" element={<ProductDetails products={products} onAddToCart={addToCart} />} />
+          <Route path="/checkout" element={<Checkout products={itemsInCart} onPurchase={purchase}/>} />
         </Routes>
       </BrowserRouter>
     </>
