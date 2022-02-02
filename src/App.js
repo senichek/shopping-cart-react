@@ -5,6 +5,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Cart from "./components/Cart";
 import ProductDetails from "./components/ProductDetails";
 import Checkout from "./components/Checkout";
+import AdminPage from "./components/AdminPage";
 
 function App() {
 
@@ -48,6 +49,10 @@ const purchase = () => {
   
 }
 
+const update = (value) => {
+  alert("Clicked update for " + value);
+}
+
   return (
     <>
     <BrowserRouter>
@@ -57,6 +62,7 @@ const purchase = () => {
           <Route path="/" element={<ProductList products={products}/>} />
           <Route path="/details/:productID" element={<ProductDetails products={products} onAddToCart={addToCart} />} />
           <Route path="/checkout" element={<Checkout products={itemsInCart} onPurchase={purchase}/>} />
+          <Route path="/admin" element={<AdminPage products={products} onUpdateClick={update} />} />
         </Routes>
       </BrowserRouter>
     </>

@@ -1,0 +1,54 @@
+import React from "react";
+import DataTable from "react-data-table-component";
+import { Fragment } from "react/cjs/react.production.min";
+import Button from "./Button";
+
+// https://react-data-table-component.netlify.app/
+function Table({ products, onUpdateClick }) {
+  const columns = [
+    {
+      name: "Product",
+      selector: (row) => row.title,
+      sortable: true,
+    },
+    {
+      name: "Price",
+      selector: (row) => row.price,
+      sortable: true,
+    },
+    {
+      name: "Quantity",
+      selector: (row) => row.quantity,
+      sortable: true,
+    },
+    {
+      name: "Action",
+      cell: (value) => {
+        return (
+          <Fragment>
+            <Button
+              color={"green"}
+              text={"Update"}
+              click={() => onUpdateClick(value._id)}
+            />
+            &nbsp;
+            <Button
+              color={"#cc0909"}
+              text={"Delete"}
+              click={() => onUpdateClick(value._id)}
+            />
+          </Fragment>
+        );
+      },
+    },
+    {},
+  ];
+
+  return (
+    <div>
+      <DataTable columns={columns} data={products} pagination />
+    </div>
+  );
+}
+
+export default Table;

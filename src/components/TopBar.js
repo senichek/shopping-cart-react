@@ -15,6 +15,7 @@ function TopBar() {
 
   return <div className='app-top-bar'>
       <a href="/"> <h1>My Store</h1> </a>
+      <Button color={'green'} text={'Admin page'} click={() => redirect('/admin')}/>
       <Button color={'white'} text={<FontAwesomeIcon icon={faShoppingCart} size='2x' />} click={() => redirect('/cart')}/>
   </div>;
 }

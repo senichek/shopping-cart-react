@@ -69,6 +69,23 @@ label {
   text-transform: uppercase;
 }
 
+table, th, td {
+  border: 1px solid black;
+  border-collapse: collapse;
+  width: 100%;
+  padding: 8px;
+  margin-right: 2px;
+}
+
+tr:hover {
+  background-color: rgb(214, 210, 210)
+}
+
+th {
+  color: #EEEEEE;
+  background-color: #1976d2;
+}
+
 /* Button */
 .button, button {
   display: inline-flex;
