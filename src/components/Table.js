@@ -4,7 +4,7 @@ import { Fragment } from "react/cjs/react.production.min";
 import Button from "./Button";
 
 // https://react-data-table-component.netlify.app/
-function Table({ products, onUpdateClick }) {
+function Table({ products, onUpdateClick, onDeleteClick }) {
   const columns = [
     {
       name: "Product",
@@ -35,7 +35,7 @@ function Table({ products, onUpdateClick }) {
             <Button
               color={"#cc0909"}
               text={"Delete"}
-              click={() => onUpdateClick(value._id)}
+              click={() => onDeleteClick(value._id)}
             />
           </Fragment>
         );

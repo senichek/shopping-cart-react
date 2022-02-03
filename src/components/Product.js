@@ -28,6 +28,7 @@ function Product({ product }) {
       {product.price > 700 && 
         <Button color={'green'} text={'Notify me'} click={() => notify(product.title)}/>
       }
+      <p>****************************</p>
     </div>
   );
 }
