@@ -51,9 +51,22 @@ useEffect(() => {
 }, [itemsInCart]) // if the [itemsInCart] changes, the <useEffect> will be called.
 
 const addToCart = (productID) => {
-  let itemToAdd = products.find(x => x._id === productID)
+  let itemToAdd = products.find(x => x._id === productID);
+
+  // Check if the item we'd like to add to cart is already present there.
+  let present = itemsInCart.find(x => x._id === itemToAdd._id);
+  if (present) {
+    // If it is present, then we modify the quantity, remove old copy and
+    // push the item with the modified quantity into the cart array.
+    present.quantity++;
+    itemsInCart.splice(itemsInCart.indexOf(present));
+    itemsInCart.push(present);
+    setItemsInCart(itemsInCart.slice()); // Slice returns new array, we need new array so that
+                                          // useEffect detects the change.
+  } else {
   // Adding new item to the array of those that are already present in the array.
-  setItemsInCart([...itemsInCart, itemToAdd])
+    setItemsInCart([...itemsInCart, itemToAdd])
+  }
   alert("Added to cart " + itemToAdd.title);
 };
 
@@ -63,6 +76,9 @@ const decreaseQuantity = (product) => {
 }
 
 const purchase = () => {
+  updateQuantityInShop(products, itemsInCart);
+  // Clearing the cart.
+  setItemsInCart([]);
   alert("Thanks for your purchase.")
   
 }
@@ -77,6 +93,22 @@ const deleteRow = (value) => {
 
 const addNewProduct = (product) => {
   setShowAddProduct(!showAddProduct);
+}
+
+const updateQuantityInShop = (itemsInShop, purchasedItems) => {
+  for (let i = 0; i < itemsInShop.length; i++) {
+    for (let j = 0; j < purchasedItems.length; j++) {
+      if (itemsInShop[i]._id === purchasedItems[j]._id) {
+        let newQuantity = itemsInShop[i].quantity - purchasedItems[j].quantity;
+          itemsInShop[i].quantity = newQuantity;
+          console.log("Shop " + itemsInShop[i].title + "= " + itemsInShop[i].quantity)
+          console.log("Cart " + purchasedItems[j].title + "= " + purchasedItems[j].quantity)
+          console.log("New Quantity " + newQuantity)
+        
+        
+      }
+    }
+  }
 }
 
   return (

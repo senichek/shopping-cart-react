@@ -14,7 +14,7 @@ function Cart({ products }) {
   return (
     <div>
       {products.map((pr) => {
-          return<h3 key={pr._id}> {pr.title}</h3>
+          return <h3 key={pr._id}> {pr.title} = {pr.quantity}</h3>
       })}
       <p>
         <Button
