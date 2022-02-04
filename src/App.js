@@ -75,10 +75,14 @@ const decreaseQuantity = (product) => {
   // Replacing the original item with the modified one;
 }
 
-const purchase = () => {
-  updateQuantityInShop(products, itemsInCart);
+const clearCart = () => {
   // Clearing the cart.
   setItemsInCart([]);
+}
+
+const purchase = () => {
+  updateQuantityInShop(products, itemsInCart);
+  clearCart();
   alert("Thanks for your purchase.")
   
 }
@@ -116,10 +120,10 @@ const updateQuantityInShop = (itemsInShop, purchasedItems) => {
     <BrowserRouter>
     <TopBar />
         <Routes>
-          <Route path="/cart" element={<Cart products={itemsInCart}/>} />
+          <Route path="/cart" element={<Cart products={itemsInCart} onClearCart={clearCart} />} />
           <Route path="/" element={<ProductList products={products}/>} />
           <Route path="/details/:productID" element={<ProductDetails products={products} onAddToCart={addToCart} />} />
-          <Route path="/checkout" element={<Checkout products={itemsInCart} onPurchase={purchase}/>} />
+          <Route path="/checkout" element={<Checkout products={itemsInCart} onPurchase={purchase} />} />
           <Route path="/admin" element={<AdminPage products={products} onUpdateClick={updateRow} onDeleteClick={deleteRow} onAddClick={addNewProduct} showAddProduct={showAddProduct} />} />
         </Routes>
       </BrowserRouter>

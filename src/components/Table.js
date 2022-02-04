@@ -33,7 +33,7 @@ function Table({ products, onUpdateClick, onDeleteClick }) {
             />
             &nbsp;
             <Button
-              color={"#cc0909"}
+              color={"#cc0909"} // dark red
               text={"Delete"}
               click={() => onDeleteClick(value._id)}
             />
