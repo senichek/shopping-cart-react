@@ -75,8 +75,21 @@ const addToCart = (productID) => {
 };
 
 const decreaseQuantity = (product) => {
-  product.quantity = product.quantity - 1;
-  // Replacing the original item with the modified one;
+  if (product.quantity === 0) {
+    return;
+  } else {
+  let index = itemsInCart.indexOf(product);
+  itemsInCart[index].quantity = product.quantity -1;
+    // Slice returns new array, we need new array so that useEffect detects the change.
+    setItemsInCart(itemsInCart.slice());
+  }
+}
+
+const increaseQuantity = (product) => {
+  let index = itemsInCart.indexOf(product);
+  itemsInCart[index].quantity = product.quantity +1;
+  // Slice returns new array, we need new array so that useEffect detects the change.
+  setItemsInCart(itemsInCart.slice());
 }
 
 const clearCart = () => {
@@ -128,7 +141,7 @@ const updateQuantityInShop = (itemsInShop, purchasedItems) => {
           <Route path="/cart" element={<Cart products={itemsInCart} onClearCart={clearCart} />} />
           <Route path="/" element={<ProductList products={products}/>} />
           <Route path="/details/:productID" element={<ProductDetails products={products} onAddToCart={addToCart} />} />
-          <Route path="/checkout" element={<Checkout products={itemsInCart} onPurchase={purchase} />} />
+          <Route path="/checkout" element={<Checkout products={itemsInCart} onPurchase={purchase} onIncrease={increaseQuantity} onDecrease={decreaseQuantity}/>} />
           <Route path="/admin" element={<AdminPage products={products} onUpdateClick={updateRow} onDeleteClick={deleteRow} onAddClick={addNewProduct} showAddProduct={showAddProduct} />} />
         </Routes>
       </BrowserRouter>

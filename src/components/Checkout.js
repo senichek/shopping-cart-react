@@ -1,8 +1,7 @@
 import React from "react";
 import Button from "./Button";
 
-function Checkout({ products, onPurchase }) {
-
+function Checkout({ products, onPurchase, onIncrease, onDecrease }) {
   const calculateTotalPrice = (products) => {
     let sum = 0;
     products.map((pr) => {
@@ -10,13 +9,25 @@ function Checkout({ products, onPurchase }) {
     });
     return sum;
   };
-  
+
   return (
     <>
       {products.map((pr) => {
         return (
           <h4 key={pr._id}>
-            {pr.quantity} x {pr.title}&nbsp;&nbsp;&nbsp; &euro;{pr.price}
+            {pr.title}&nbsp;&nbsp;&nbsp; &euro;{pr.price}
+            &nbsp;&nbsp;
+            <Button
+              color={"#1976d2'"}
+              text={"-"}
+              click={() => onDecrease(pr)}
+            />
+            &nbsp;{pr.quantity}&nbsp;
+            <Button
+              color={"#1976d2'"}
+              text={"+"}
+              click={() => onIncrease(pr)}
+            />
           </h4>
         );
       })}
