@@ -1,6 +1,8 @@
 import React from "react";
 import Button from "./Button";
 import { useNavigate } from "react-router-dom";
+import { NotificationContainer, NotificationManager } from "react-notifications";
+import "react-notifications/lib/notifications.css";
 
 function Product({ product }) {
 
@@ -12,7 +14,8 @@ function Product({ product }) {
   };
     
     const notify = (productName) => {
-      alert('You will be notified when the price of <' + productName + '> drops below 700 EUR')
+      NotificationManager.warning('when the price drops below 700 EUR', 'You will be notified', 2000);
+     // alert('You will be notified when the price of <' + productName + '> drops below 700 EUR')
   }
   // The expression <product.price > 700 &&> means that we 
   // will show the button if the price is higher than 700,
@@ -20,6 +23,7 @@ function Product({ product }) {
   // https://reactjs.org/docs/conditional-rendering.html
   return (
     <div>
+      <NotificationContainer />
       <h3>{product.title}</h3>
       <p>{product.description}</p>
       <p>

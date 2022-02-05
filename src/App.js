@@ -6,6 +6,9 @@ import Cart from "./components/Cart";
 import ProductDetails from "./components/ProductDetails";
 import Checkout from "./components/Checkout";
 import AdminPage from "./components/AdminPage";
+// https://www.npmjs.com/package/react-notifications
+import { NotificationContainer, NotificationManager } from "react-notifications";
+import "react-notifications/lib/notifications.css";
 
 function App() {
 
@@ -67,7 +70,8 @@ const addToCart = (productID) => {
   // Adding new item to the array of those that are already present in the array.
     setItemsInCart([...itemsInCart, itemToAdd])
   }
-  alert("Added to cart " + itemToAdd.title);
+  //NotificationManager.success('Success message', 'Title here', 'timeout);
+  NotificationManager.success('has been added to cart.', itemToAdd.title, 1000);
 };
 
 const decreaseQuantity = (product) => {
@@ -80,11 +84,11 @@ const clearCart = () => {
   setItemsInCart([]);
 }
 
-const purchase = () => {
+const purchase = (e) => {
   updateQuantityInShop(products, itemsInCart);
   clearCart();
-  alert("Thanks for your purchase.")
-  
+  e.preventDefault(); // prevent the page from reloading/refreshing
+  NotificationManager.success('Thank you for your purchase.', '');
 }
 
 const updateRow = (value) => {
@@ -119,6 +123,7 @@ const updateQuantityInShop = (itemsInShop, purchasedItems) => {
     <>
     <BrowserRouter>
     <TopBar />
+    <NotificationContainer />
         <Routes>
           <Route path="/cart" element={<Cart products={itemsInCart} onClearCart={clearCart} />} />
           <Route path="/" element={<ProductList products={products}/>} />

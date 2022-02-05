@@ -6,7 +6,7 @@ function Checkout({ products, onPurchase }) {
   const calculateTotalPrice = (products) => {
     let sum = 0;
     products.map((pr) => {
-      return (sum = sum + pr.price);
+      return (sum = sum + pr.price * pr.quantity);
     });
     return sum;
   };
@@ -16,7 +16,7 @@ function Checkout({ products, onPurchase }) {
       {products.map((pr) => {
         return (
           <h4 key={pr._id}>
-            {pr.title}: EUR {pr.price}
+            {pr.quantity} x {pr.title}&nbsp;&nbsp;&nbsp; &euro;{pr.price}
           </h4>
         );
       })}
