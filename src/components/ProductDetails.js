@@ -33,7 +33,7 @@ function ProductDetails({ products, onAddToCart }) {
               color={"green"}
               text={"Add to cart"}
               // We can pass props as functions using the syntx below, i.e. () => onAddToCart(productID)
-              click={() => onAddToCart(productID)}
+              click={() => onAddToCart(getProductByID(productID))}
             />
           </p>
           <Button

@@ -1,7 +1,7 @@
 import ProductList from "./components/ProductList";
 import TopBar from "./components/TopBar";
-import React, { useState, useEffect } from 'react';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Cart from "./components/Cart";
 import ProductDetails from "./components/ProductDetails";
 import Checkout from "./components/Checkout";
@@ -12,137 +12,211 @@ import "react-notifications/lib/notifications.css";
 
 function App() {
 
-  const loggedInUserID = 1;
-
   const [products, setProducts] = useState([]);
-  
+
   // Variables responsible for showing the "add new product" form.
   const [showAddProduct, setShowAddProduct] = useState(false);
 
   // This function persists the products across the page reloads.
-useEffect(() => {
-  const getProducts = async () => {
-    const productsFromServer = await fetchProducts();
-    setProducts(productsFromServer)
-  }
-  getProducts()
-}, [])
+  useEffect(() => {
+    const getProducts = async () => {
+      const productsFromServer = await fetchProducts();
+      setProducts(productsFromServer);
+    };
+    getProducts();
+  }, []);
 
-// Fetch products from server
-const fetchProducts = async () => {
-  const res = await fetch('http://localhost:3001/item/all')
-  const data = await res.json()
-  return data;
-}
+  // Fetch products from server
+  const fetchProducts = async () => {
+    const res = await fetch("http://localhost:3001/item/all");
+    const data = await res.json();
+    return data;
+  };
 
-// Empty array for adding the items in Cart
-const [itemsInCart, setItemsInCart] = useState([]);
+  // Empty array for adding the items in Cart
+  const [itemsInCart, setItemsInCart] = useState([]);
 
-// To prevent the items from disapearing from the Cart page when the page is reloaded
-// we need to use useEffect and localStorage.
-useEffect(() => {
-  // Getting the items from the storage.
-  const cartItemsFromStorage = JSON.parse(localStorage.getItem(LOCAL_STORAGE_CART_ITEMS_KEY));
-  if (cartItemsFromStorage) setItemsInCart(cartItemsFromStorage);
-}, []) // We pass empty array. The empty array never changes, this is why
-// this <useEffect> will be called only once.
+  // To prevent the items from disapearing from the Cart page when the page is reloaded
+  // we need to use useEffect and localStorage.
+  useEffect(() => {
+    // Getting the items from the storage.
+    const cartItemsFromStorage = JSON.parse(
+      localStorage.getItem(LOCAL_STORAGE_CART_ITEMS_KEY)
+    );
+    if (cartItemsFromStorage) setItemsInCart(cartItemsFromStorage);
+  }, []); // We pass empty array. The empty array never changes, this is why
+  // this <useEffect> will be called only once.
 
-// Setting the items to the storage.
-const LOCAL_STORAGE_CART_ITEMS_KEY = 'items.in.cart';
-useEffect(() => {
-  localStorage.setItem(LOCAL_STORAGE_CART_ITEMS_KEY, JSON.stringify(itemsInCart))
-}, [itemsInCart]) // if the [itemsInCart] changes, the <useEffect> will be called.
+  // Setting the items to the storage.
+  const LOCAL_STORAGE_CART_ITEMS_KEY = "items.in.cart";
+  useEffect(() => {
+    localStorage.setItem(
+      LOCAL_STORAGE_CART_ITEMS_KEY,
+      JSON.stringify(itemsInCart)
+    );
+  }, [itemsInCart]); // if the [itemsInCart] changes, the <useEffect> will be called.
 
-const addToCart = (productID) => {
-  let itemToAdd = products.find(x => x._id === productID);
+  const addToCart = (product) => {
+    // Creating the copy of the item to put it into the cart.
+    // If we do not create the copy, then we will modify the quantity
+    // of the item from the <products> and this is something we do not need.
+    var itemToAdd = Object.assign({}, product, { quantity: 1 });
+    if (isAvailableForPurchase(products, itemsInCart, product)) {
+      let present = itemsInCart.find((x) => x._id === itemToAdd._id);
+      if (present) {
+        // If it is present, then we modify the quantity.
+        let index = itemsInCart.indexOf(present);
+        itemsInCart[index].quantity += 1;
+        setItemsInCart(itemsInCart.slice()); // Slice returns new array, we need new array so that
+        // useEffect detects the change.
+      } else {
+        // Adding new item to the array of those that are already present in the array.
+        setItemsInCart([...itemsInCart, itemToAdd]);
+        NotificationManager.success(
+          "has beed added to your cart.",
+          itemToAdd.title,
+          2000
+        );
+      }
+    } else {
+      NotificationManager.warning(
+        " is out of stock, sorry.",
+        product.title,
+        2000
+      );
+      return;
+    }
+  };
 
-  // Check if the item we'd like to add to cart is already present there.
-  let present = itemsInCart.find(x => x._id === itemToAdd._id);
-  if (present) {
-    // If it is present, then we modify the quantity, remove old copy and
-    // push the item with the modified quantity into the cart array.
-    present.quantity++;
-    itemsInCart.splice(itemsInCart.indexOf(present));
-    itemsInCart.push(present);
-    setItemsInCart(itemsInCart.slice()); // Slice returns new array, we need new array so that
-                                          // useEffect detects the change.
-  } else {
-  // Adding new item to the array of those that are already present in the array.
-    setItemsInCart([...itemsInCart, itemToAdd])
-  }
-  //NotificationManager.success('Success message', 'Title here', 'timeout);
-  NotificationManager.success('has been added to cart.', itemToAdd.title, 1000);
-};
+  const decreaseQuantity = (product) => {
+    if (product.quantity === 0) {
+      return;
+    } else {
+      let index = itemsInCart.indexOf(product);
+      itemsInCart[index].quantity -= 1;
+      // Slice returns new array, we need new array so that useEffect detects the change.
+      setItemsInCart(itemsInCart.slice());
+    }
+  };
 
-const decreaseQuantity = (product) => {
-  if (product.quantity === 0) {
-    return;
-  } else {
-  let index = itemsInCart.indexOf(product);
-  itemsInCart[index].quantity = product.quantity -1;
-    // Slice returns new array, we need new array so that useEffect detects the change.
-    setItemsInCart(itemsInCart.slice());
-  }
-}
+  const increaseQuantity = (product) => {
+    if (isAvailableForPurchase(products, itemsInCart, product)) {
+      let index = itemsInCart.indexOf(product);
+      itemsInCart[index].quantity += 1;
+      itemsInCart.slice();
+      setItemsInCart(itemsInCart.slice());
+    } else {
+      NotificationManager.warning(
+        "You have reached the max amount.",
+        product.title,
+        2000
+      );
+    }
+  };
 
-const increaseQuantity = (product) => {
-  let index = itemsInCart.indexOf(product);
-  itemsInCart[index].quantity = product.quantity +1;
-  // Slice returns new array, we need new array so that useEffect detects the change.
-  setItemsInCart(itemsInCart.slice());
-}
+  const clearCart = () => {
+    // Clearing the cart.
+    setItemsInCart([]);
+  };
 
-const clearCart = () => {
-  // Clearing the cart.
-  setItemsInCart([]);
-}
+  const purchase = (e) => {
+    debugger;
+    updateQuantityInShop(products, itemsInCart);
+    clearCart();
+    e.preventDefault();
+    NotificationManager.success("Thank you for your purchase.", "");
+  };
 
-const purchase = (e) => {
-  updateQuantityInShop(products, itemsInCart);
-  clearCart();
-  e.preventDefault(); // prevent the page from reloading/refreshing
-  NotificationManager.success('Thank you for your purchase.', '');
-}
+  const updateRow = (value) => {
+    alert("Clicked update for " + value);
+  };
 
-const updateRow = (value) => {
-  alert("Clicked update for " + value);
-}
+  const deleteRow = (value) => {
+    alert("Clicked Delete for " + value);
+  };
 
-const deleteRow = (value) => {
-  alert("Clicked Delete for " + value);
-}
+  const addNewProduct = (product) => {
+    setShowAddProduct(!showAddProduct);
+  };
 
-const addNewProduct = (product) => {
-  setShowAddProduct(!showAddProduct);
-}
-
-const updateQuantityInShop = (itemsInShop, purchasedItems) => {
-  for (let i = 0; i < itemsInShop.length; i++) {
-    for (let j = 0; j < purchasedItems.length; j++) {
-      if (itemsInShop[i]._id === purchasedItems[j]._id) {
-        let newQuantity = itemsInShop[i].quantity - purchasedItems[j].quantity;
-          itemsInShop[i].quantity = newQuantity;
-          console.log("Shop " + itemsInShop[i].title + "= " + itemsInShop[i].quantity)
-          console.log("Cart " + purchasedItems[j].title + "= " + purchasedItems[j].quantity)
-          console.log("New Quantity " + newQuantity)
-        
-        
+  const isAvailableForPurchase = (itemsInShop, itemsInCart, itemToPurchase) => {
+    debugger;
+    let presentInTheCart = itemsInCart.find(
+      (x) => x._id === itemToPurchase._id
+    );
+    for (let i = 0; i < itemsInShop.length; i++) {
+      if (itemsInShop[i]._id === itemToPurchase._id) {
+        let available = itemsInShop[i].quantity;
+        let needed = 0;
+        /* If the item we are adding to the cart is already present there,
+        then we sum up the quantity of the item we'd like to buy with that
+        present in the cart. */
+        if (presentInTheCart) {
+          needed = presentInTheCart.quantity + itemToPurchase.quantity;
+        } else {
+          needed = itemToPurchase.quantity;
+        }
+        let newQuantity = available - needed;
+        if (newQuantity < 0) {
+          return false;
+        } else {
+          return true;
+        }
       }
     }
-  }
-}
+  };
+
+  const updateQuantityInShop = (itemsInShop, purchasedItems) => {
+    debugger;
+    for (let i = 0; i < itemsInShop.length; i++) {
+      for (let j = 0; j < purchasedItems.length; j++) {
+        if (itemsInShop[i]._id === purchasedItems[j]._id) {
+          itemsInShop[i].quantity -= purchasedItems[j].quantity;
+        }
+      }
+    }
+  };
 
   return (
     <>
-    <BrowserRouter>
-    <TopBar />
-    <NotificationContainer />
+      <BrowserRouter>
+        <TopBar />
+        <NotificationContainer />
         <Routes>
-          <Route path="/cart" element={<Cart products={itemsInCart} onClearCart={clearCart} />} />
-          <Route path="/" element={<ProductList products={products}/>} />
-          <Route path="/details/:productID" element={<ProductDetails products={products} onAddToCart={addToCart} />} />
-          <Route path="/checkout" element={<Checkout products={itemsInCart} onPurchase={purchase} onIncrease={increaseQuantity} onDecrease={decreaseQuantity}/>} />
-          <Route path="/admin" element={<AdminPage products={products} onUpdateClick={updateRow} onDeleteClick={deleteRow} onAddClick={addNewProduct} showAddProduct={showAddProduct} />} />
+          <Route
+            path="/cart"
+            element={<Cart products={itemsInCart} onClearCart={clearCart} />}
+          />
+          <Route path="/" element={<ProductList products={products} />} />
+          <Route
+            path="/details/:productID"
+            element={
+              <ProductDetails products={products} onAddToCart={addToCart} />
+            }
+          />
+          <Route
+            path="/checkout"
+            element={
+              <Checkout
+                products={itemsInCart}
+                onPurchase={purchase}
+                onIncrease={increaseQuantity}
+                onDecrease={decreaseQuantity}
+              />
+            }
+          />
+          <Route
+            path="/admin"
+            element={
+              <AdminPage
+                products={products}
+                onUpdateClick={updateRow}
+                onDeleteClick={deleteRow}
+                onAddClick={addNewProduct}
+                showAddProduct={showAddProduct}
+              />
+            }
+          />
         </Routes>
       </BrowserRouter>
     </>
