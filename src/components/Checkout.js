@@ -1,7 +1,12 @@
 import React from "react";
 import Button from "./Button";
-
-function Checkout({ products, onPurchase, onIncrease, onDecrease }) {
+// {showCheckoutForms && } - if <true> we show the forms.
+function Checkout({ products, onPurchase, onIncrease, onDecrease, showCheckoutForms }) {
+  if (products.length > 0) {
+    showCheckoutForms = true;
+  } else {
+    showCheckoutForms = false;
+  }
   const calculateTotalPrice = (products) => {
     let sum = 0;
     products.map((pr) => {
@@ -12,6 +17,7 @@ function Checkout({ products, onPurchase, onIncrease, onDecrease }) {
 
   return (
     <>
+    {showCheckoutForms && <div>
       {products.map((pr) => {
         return (
           <h4 key={pr._id}>
@@ -50,6 +56,7 @@ function Checkout({ products, onPurchase, onIncrease, onDecrease }) {
           click={onPurchase}
         />
       </form>
+      </div>}
     </>
   );
 }

@@ -39,7 +39,7 @@ function Cart({ products, onClearCart }) {
       )}
 
 {products.length <= 0 && (
-        <h3>The cart is empty. Let's go shopping.</h3>
+        <h3>The cart is empty.</h3>
       )}
 
       <p>

@@ -15,7 +15,9 @@ function App() {
   const [products, setProducts] = useState([]);
 
   // Variables responsible for showing the "add new product" form.
+  // and the forms of checkout page.
   const [showAddProduct, setShowAddProduct] = useState(false);
+  const [showCheckoutForms, setShowCheckoutForms] = useState(false);
 
   // This function persists the products across the page reloads.
   useEffect(() => {
@@ -68,7 +70,7 @@ function App() {
         let index = itemsInCart.indexOf(present);
         itemsInCart[index].quantity += 1;
         setItemsInCart(itemsInCart.slice()); // Slice returns new array, we need new array so that
-        // useEffect detects the change.
+                                            // useEffect detects the change.
       } else {
         // Adding new item to the array of those that are already present in the array.
         setItemsInCart([...itemsInCart, itemToAdd]);
@@ -217,6 +219,7 @@ function App() {
                 onPurchase={purchase}
                 onIncrease={increaseQuantity}
                 onDecrease={decreaseQuantity}
+                showCheckoutForms={showCheckoutForms}
               />
             }
           />
