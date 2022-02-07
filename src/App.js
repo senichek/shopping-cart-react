@@ -61,7 +61,7 @@ function App() {
     // If we do not create the copy, then we will modify the quantity
     // of the item from the <products> and this is something we do not need.
     var itemToAdd = Object.assign({}, product, { quantity: 1 });
-    if (isAvailableForPurchase(products, itemsInCart, product)) {
+    if (isAvailableForPurchase(products, itemsInCart, itemToAdd)) {
       let present = itemsInCart.find((x) => x._id === itemToAdd._id);
       if (present) {
         // If it is present, then we modify the quantity.
@@ -120,12 +120,23 @@ function App() {
   };
 
   const purchase = (e) => {
-    debugger;
-    updateQuantityInShop(products, itemsInCart);
+    // updatedProducts - the items (products) with the changed quantity.
+    const updatedProducts = updateQuantityInShop(products, itemsInCart);
+    updateProductsInDB(updatedProducts);
     clearCart();
     e.preventDefault();
     NotificationManager.success("Thank you for your purchase.", "");
   };
+
+  const updateProductsInDB = async (products) => {
+      await fetch('http://localhost:3001/item/updateQuantity', {
+      method: 'POST',
+      headers: {
+        'Content-type': 'application/json',
+      },
+      body: JSON.stringify(products),
+    })  
+  }
 
   const updateRow = (value) => {
     alert("Clicked update for " + value);
@@ -140,7 +151,6 @@ function App() {
   };
 
   const isAvailableForPurchase = (itemsInShop, itemsInCart, itemToPurchase) => {
-    debugger;
     let presentInTheCart = itemsInCart.find(
       (x) => x._id === itemToPurchase._id
     );
@@ -167,14 +177,19 @@ function App() {
   };
 
   const updateQuantityInShop = (itemsInShop, purchasedItems) => {
-    debugger;
+    /* This method updates the quantity of items in the shop and 
+    returns the array of the updated items. The array of the updated 
+    items will be passed to API to update the quantity in DB. */
+    const updatedItems = [];
     for (let i = 0; i < itemsInShop.length; i++) {
       for (let j = 0; j < purchasedItems.length; j++) {
         if (itemsInShop[i]._id === purchasedItems[j]._id) {
           itemsInShop[i].quantity -= purchasedItems[j].quantity;
+          updatedItems.push(itemsInShop[i]);
         }
       }
     }
+    return updatedItems;
   };
 
   return (
