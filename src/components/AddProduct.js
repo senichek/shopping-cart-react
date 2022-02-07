@@ -1,22 +1,26 @@
 import React from 'react';
+import { useRef } from 'react'; // It allows to reference the elements of html page.
 import Button from './Button';
 
-function AddProduct({ onClickSave }) {
+function AddProduct({ onSaveClick }) {
+  const titleRef = useRef();
+  const priceRef = useRef();
+  const quantityRef = useRef();
   return <div>
       <form>
         <div className="form-control">
-          <input type="text" placeholder="Product name" />
+          <input ref={titleRef} type="text" placeholder="Product name" />
         </div>
         <div className="form-control">
-          <input type="number" placeholder="Price" />
+          <input ref={priceRef} type="number" placeholder="Price" />
         </div>
         <div className="form-control">
-          <input type="number" placeholder="Quantity" />
+          <input ref={quantityRef} type="number" placeholder="Quantity" />
         </div>
         <Button
           color={"#1976d2"}
           text={"Save"}
-          click={() => onClickSave()}
+          click={() => onSaveClick(titleRef.current.value, priceRef.current.value, quantityRef.current.value)}
         />
       </form>
   </div>;

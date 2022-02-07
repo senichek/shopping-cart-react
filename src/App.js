@@ -148,7 +148,7 @@ function App() {
     alert("Clicked Delete for " + value);
   };
 
-  const addNewProduct = (product) => {
+  const showAddNewProductForm = (product) => {
     setShowAddProduct(!showAddProduct);
   };
 
@@ -194,6 +194,17 @@ function App() {
     return updatedItems;
   };
 
+  const saveNewProduct = async (title, price, quantity) => {
+    const product = {title: title, price: price, quantity: quantity}
+    await fetch('http://localhost:3001/item', {
+      method: 'POST',
+      headers: {
+        'Content-type': 'application/json',
+      },
+      body: JSON.stringify(product),
+    })
+  }
+
   return (
     <>
       <BrowserRouter>
@@ -230,7 +241,8 @@ function App() {
                 products={products}
                 onUpdateClick={updateRow}
                 onDeleteClick={deleteRow}
-                onAddClick={addNewProduct}
+                onAddClick={showAddNewProductForm}
+                onSaveClick={saveNewProduct}
                 showAddProduct={showAddProduct}
               />
             }
