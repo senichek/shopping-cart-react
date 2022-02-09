@@ -14,10 +14,14 @@ function App() {
 
   const [products, setProducts] = useState([]);
 
+  // Container for the product we'd like to update.
+  let [productToUpdate, setProductToUpdate] = useState([]);
+
   // Variables responsible for showing the "add new product" form.
   // and the forms of checkout page.
   const [showAddProduct, setShowAddProduct] = useState(false);
   const [showCheckoutForms, setShowCheckoutForms] = useState(false);
+  const [showUpdateProductForm, setShowUpdateProductForm] = useState(false);
 
   // This function persists the products across the page reloads.
   useEffect(() => {
@@ -125,7 +129,7 @@ function App() {
     // updatedProducts - the items (products) with the changed quantity.
     const updatedProducts = updateQuantityInShop(products, itemsInCart);
     updateProductsInDB(updatedProducts);
-    clearCart();
+    clearCart();    
     e.preventDefault();
     NotificationManager.success("Thank you for your purchase.", "");
   };
@@ -141,11 +145,25 @@ function App() {
   }
 
   const updateRow = (value) => {
-    alert("Clicked update for " + value);
+    setShowUpdateProductForm(!showUpdateProductForm);
+    setProductToUpdate(value);
   };
 
-  const deleteRow = (value) => {
-    alert("Clicked Delete for " + value);
+  const deleteRow = async (id) => {
+    const result = await fetch(`http://localhost:3001/item/${id}`, {
+      method: 'DELETE',
+    })
+
+    /* If the deletion is successfull (code 200) we update the collection of products
+     by filtering those who are different from the one who has been deleted. Otherwise 
+     we'll return the error message. */
+    result.status === 200
+      ? setProducts(products.filter((pr) => pr._id !== id))
+      : NotificationManager.warning(
+        "deleting the item. Something is wrong.",
+        "Error",
+        2000
+      );
   };
 
   const showAddNewProductForm = (product) => {
@@ -164,7 +182,7 @@ function App() {
         then we sum up the quantity of the item we'd like to buy with that
         present in the cart. */
         if (presentInTheCart) {
-          needed = presentInTheCart.quantity + itemToPurchase.quantity;
+          needed = 1 + presentInTheCart.quantity;
         } else {
           needed = itemToPurchase.quantity;
         }
@@ -194,10 +212,21 @@ function App() {
     return updatedItems;
   };
 
-  const saveNewProduct = async (title, price, quantity) => {
-    const product = {title: title, price: price, quantity: quantity}
+  const saveNewProduct = async (title, description, price, quantity) => {
+    const product = {title: title, description: description, price: price, quantity: quantity}
     await fetch('http://localhost:3001/item', {
       method: 'POST',
+      headers: {
+        'Content-type': 'application/json',
+      },
+      body: JSON.stringify(product),
+    })
+  }
+
+  const submitUpdateRowtoDB = async (id, title, description, price, quantity) => {
+    const product = {title: title, description: description, price: price, quantity: quantity}
+    await fetch(`http://localhost:3001/item/${id}`, {
+      method: 'PATCH',
       headers: {
         'Content-type': 'application/json',
       },
@@ -244,6 +273,9 @@ function App() {
                 onAddClick={showAddNewProductForm}
                 onSaveClick={saveNewProduct}
                 showAddProduct={showAddProduct}
+                showUpdateProductForm={showUpdateProductForm}
+                productToUpdate={productToUpdate}
+                onSaveUpdateClick={submitUpdateRowtoDB}
               />
             }
           />

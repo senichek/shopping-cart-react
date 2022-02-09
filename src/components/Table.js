@@ -12,6 +12,11 @@ function Table({ products, onUpdateClick, onDeleteClick }) {
       sortable: true,
     },
     {
+      name: "Description",
+      selector: (row) => row.description,
+      sortable: true,
+    },
+    {
       name: "Price",
       selector: (row) => row.price,
       sortable: true,
@@ -29,7 +34,7 @@ function Table({ products, onUpdateClick, onDeleteClick }) {
             <Button
               color={"green"}
               text={"Update"}
-              click={() => onUpdateClick(value._id)}
+              click={() => onUpdateClick(value)}
             />
             &nbsp;
             <Button
