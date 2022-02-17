@@ -1,6 +1,6 @@
 import ProductList from "./components/ProductList";
 import TopBar from "./components/TopBar";
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Cart from "./components/Cart";
 import ProductDetails from "./components/ProductDetails";
@@ -9,6 +9,7 @@ import AdminPage from "./components/AdminPage";
 // https://www.npmjs.com/package/react-notifications
 import { NotificationContainer, NotificationManager } from "react-notifications";
 import "react-notifications/lib/notifications.css";
+import Greeting from "./components/Greeting";
 
 function App() {
 
@@ -22,6 +23,7 @@ function App() {
   const [showAddProduct, setShowAddProduct] = useState(false);
   const [showCheckoutForms, setShowCheckoutForms] = useState(false);
   const [showUpdateProductForm, setShowUpdateProductForm] = useState(false);
+  
 
   // This function persists the products across the page reloads.
   useEffect(() => {
@@ -244,7 +246,7 @@ function App() {
             path="/cart"
             element={<Cart products={itemsInCart} onClearCart={clearCart} />}
           />
-          <Route path="/" element={<ProductList products={products} />} />
+          <Route path="/shop" element={<ProductList products={products} />} />
           <Route
             path="/details/:productID"
             element={
@@ -279,6 +281,7 @@ function App() {
               />
             }
           />
+          <Route path="/" element={<Greeting />} />
         </Routes>
       </BrowserRouter>
     </>

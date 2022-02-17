@@ -1,0 +1,49 @@
+import React from 'react'
+
+function Greeting() {
+  return (
+    <>
+    <div className='landing-div-1'>
+        <h1>Online store app (REACT)</h1>
+        <h2>
+        This app is taken from the <a href="https://angular.io/start">Angular's official guide</a> (it's not a typo). 
+        I've recreated the app <br></br> (with a couple of modifications) using <a href="https://reactjs.org/">React</a> for my training purposes.
+        <br></br>There are also tests using CYPRESS for frontend and JEST and SUPERTEST for backend.
+        </h2>
+        <form action="/shop">
+         <button type="submit">START</button>
+      </form>
+    </div>
+
+    <div className='landing-container'>
+        <div className='landing-div-2'> <h1>Features of the app:</h1>
+        <ul>
+            <li> <h3>See the list of available products</h3> </li>
+            <li> <h3>See the details of the specific product</h3> </li>
+            <li> <h3>Be notified when the price drops below certain point</h3> </li>
+            <li> <h3>Modify the amount of products in your cart </h3> </li>
+            <li> <h3> Log in as admin to manage the list of products (CRUD)</h3> </li>
+        </ul> 
+        </div>
+
+        <div className='landing-div-3'> <h1>Backend</h1>
+        <h2>The backend is REST API which is created using Node.js, Express <br></br> and MongoDB.</h2>
+        <form action="/SWAGGER">
+         <button type="submit">Swagger doc</button>
+      </form>
+      <br></br>
+      <form action="https://github.com/senichek/shopping-cart-react.git">
+         <button type="submit">Frontend GitHub link</button>
+      </form>
+      <br></br>
+      <form action="https://github.com/senichek/shopping-cart-rest-api-nodeJS-express.git">
+         <button type="submit">Backend GitHub link</button>
+      </form>
+        </div>
+        
+    </div>
+    </>
+  )
+}
+
+export default Greeting

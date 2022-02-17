@@ -39,7 +39,7 @@ function ProductDetails({ products, onAddToCart }) {
           <Button
             color={"#1976d2"}
             text={"Go back to store"}
-            click={() => redirect("/")}
+            click={() => redirect("/shop")}
           />
         </>
       )}

@@ -46,7 +46,7 @@ function Cart({ products, onClearCart }) {
         <Button
           color={"#1976d2"}
           text={"Go back to store"}
-          click={() => redirect("/")}
+          click={() => redirect("/shop")}
         />
       </p>
     </div>
