@@ -36,7 +36,7 @@ function App() {
 
   // Fetch products from server
   const fetchProducts = async () => {
-    const res = await fetch("http://localhost:3001/item/all");
+    const res = await fetch("https://shopping-cart-rest-api.herokuapp.com/item/all");
     const data = await res.json();
     return data;
   };
@@ -137,7 +137,7 @@ function App() {
   };
 
   const updateProductsInDB = async (products) => {
-      await fetch('http://localhost:3001/item/updateQuantity', {
+      await fetch('https://shopping-cart-rest-api.herokuapp.com/item/updateQuantity', {
       method: 'POST',
       headers: {
         'Content-type': 'application/json',
@@ -152,7 +152,7 @@ function App() {
   };
 
   const deleteRow = async (id) => {
-    const result = await fetch(`http://localhost:3001/item/${id}`, {
+    const result = await fetch(`https://shopping-cart-rest-api.herokuapp.com/item/${id}`, {
       method: 'DELETE',
     })
 
@@ -216,7 +216,7 @@ function App() {
 
   const saveNewProduct = async (title, description, price, quantity) => {
     const product = {title: title, description: description, price: price, quantity: quantity}
-    await fetch('http://localhost:3001/item', {
+    await fetch('https://shopping-cart-rest-api.herokuapp.com/item', {
       method: 'POST',
       headers: {
         'Content-type': 'application/json',
@@ -227,7 +227,7 @@ function App() {
 
   const submitUpdateRowtoDB = async (id, title, description, price, quantity) => {
     const product = {title: title, description: description, price: price, quantity: quantity}
-    await fetch(`http://localhost:3001/item/${id}`, {
+    await fetch(`https://shopping-cart-rest-api.herokuapp.com/item/${id}`, {
       method: 'PATCH',
       headers: {
         'Content-type': 'application/json',

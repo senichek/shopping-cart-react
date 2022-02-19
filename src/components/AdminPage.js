@@ -23,7 +23,7 @@ const login = async (email, password) => {
     email: email,
     password: password
   }
-  const response = await fetch('http://localhost:3001/user/login', {
+  const response = await fetch('https://shopping-cart-rest-api.herokuapp.com/user/login', {
     method: 'POST',
     headers: {
       'Content-type': 'application/json',
@@ -55,9 +55,8 @@ localStorage.removeItem("LOGGED_IN_USER");
 setLoggedInUser([]); // Empty array because there is no loggedInUser after the logout.
 }
 
+const loggedInUser = JSON.parse(localStorage.getItem("LOGGED_IN_USER"));
 
-  const loggedInUser = JSON.parse(localStorage.getItem("LOGGED_IN_USER"));
-debugger
   if (loggedInUser != null && loggedInUser.token && loggedInUser.role === "Admin") {
     return (
       <div>
