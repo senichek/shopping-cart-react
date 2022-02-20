@@ -6,8 +6,8 @@ function Greeting() {
     <div className='landing-div-1'>
         <h1>Online store app (REACT)</h1>
         <h2>
-        This app is taken from the <a href="https://angular.io/start">Angular's official guide</a> (it's not a typo). 
-        I've recreated the app <br></br> (with a couple of modifications) using <a href="https://reactjs.org/">React</a> for my training purposes.
+        The idea and layout of this app is taken from the <a href="https://angular.io/start">Angular's official guide</a> (it's not a typo). 
+        I've recreated <br></br> the app (with a couple of modifications) using <a href="https://reactjs.org/">React</a> for my training purposes.
         <br></br>There are also tests using CYPRESS for frontend and JEST and SUPERTEST for backend.
         </h2>
         <form action="/shop">
@@ -28,7 +28,7 @@ function Greeting() {
 
         <div className='landing-div-3'> <h1>Backend</h1>
         <h2>The backend is REST API which is created using Node.js, Express <br></br> and MongoDB.</h2>
-        <form action="/SWAGGER">
+        <form action="https://shopping-cart-rest-api.herokuapp.com/api-docs/">
          <button type="submit">Swagger doc</button>
       </form>
       <br></br>

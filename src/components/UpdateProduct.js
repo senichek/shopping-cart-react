@@ -26,7 +26,7 @@ function UpdateProduct({ onSaveUpdateClick, onCancelClick, productToUpdate }) {
           </div>
           <Button
             color={"green"}
-            text={"Update"}
+            text={"Save change"}
             click={() => onSaveUpdateClick(idRef.current.value, titleRef.current.value, descriptionRef.current.value, priceRef.current.value, quantityRef.current.value)}
           />
           &nbsp;
